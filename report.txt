@@ -1,0 +1,10 @@
+/home/alexandrina/secure_project
+├── backup
+│   └── secret_plan_v1.txt
+├── docs
+│   └── secret_plan.txt
+├── evidence.log
+├── report.txt
+└── src
+
+4 directories, 4 files
