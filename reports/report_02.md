@@ -24,3 +24,13 @@ drwxr-x--- 10 alexandrina alexandrina 4096 Feb 19 17:17 ..
 -rw-r--r--  1 alexandrina alexandrina  109 Feb 19 17:17 id_ed25519.pub
 alexandrina@LAPTOP-U0CIKMN9:~$
 ```
+
+## Доп скрины каждого этапа
+#### Создание папки, файла, юзера
+![intern_access_denied](screenshots/1.png)
+#### Проверка за ```intern```
+![intern_access_denied](screenshots/2.png)
+#### Создание shh
+![intern_access_denied](screenshots/3.png)
+#### Присвоение доступов и проверка
+![intern_access_denied](screenshots/4.png)
