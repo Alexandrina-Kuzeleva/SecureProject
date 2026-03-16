@@ -7,4 +7,13 @@ repos:
       - id: trailing-whitespace  # Удаляет лишние пробелы в конце строк
         exclude: '\.md$'
       - id: check-added-large-files # Предотвращает коммит больших файлов (например, .env или БД)
-      - id: detect-private-key
+      - id: detect-private-key   # Проверяет, что не коммитятся приватные ключи
+
+  - repo: local
+    hooks:
+      - id: pip-audit
+        name: pip-audit
+        entry: pip-audit -r requirements.txt
+        language: system
+        files: requirements.txt
+        pass_filenames: false
