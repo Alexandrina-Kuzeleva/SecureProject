@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Стена комментариев</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .comment { border-bottom: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        form { margin: 20px 0; }
+        textarea { width: 100%; padding: 10px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Стена комментариев</h1>
+    
+    <form method="post">
+        <textarea name="comment" rows="3" placeholder="Ваш комментарий..."></textarea>
+        <br>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <h2>Комментарии:</h2>
+    {% for comment in comments %}
+        <div class="comment">
+            {{ comment }}
+        </div>
+    {% else %}
+        <p>Нет комментариев. Будьте первым!</p>
+    {% endfor %}
+</body>
+</html>
