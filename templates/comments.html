@@ -22,8 +22,7 @@
     <h2>Комментарии:</h2>
     {% for comment in comments %}
         <div class="comment">
-            <!-- ВНИМАНИЕ: здесь мы намеренно используем | safe для демонстрации XSS -->
-            {{ comment | safe }}
+            {{ comment }}
         </div>
     {% else %}
         <p>Нет комментариев. Будьте первым!</p>
