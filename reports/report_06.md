@@ -11,3 +11,7 @@
 ![2](screenshots/task_6/del.gif)
 
 ![2.1](screenshots/task_6/del.png)
+
+## 3. Защита №2: CSP
+
+![3](screenshots/task_6/csp.png)

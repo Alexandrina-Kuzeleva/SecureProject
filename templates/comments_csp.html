@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Стена комментариев</title>
+</head>
+<body>
+    <h1>Стена комментариев</h1>
+    
+    <form method="post">
+        <textarea name="comment" rows="3" placeholder="Ваш комментарий..."></textarea>
+        <br>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <h2>Комментарии:</h2>
+    {% for comment in comments %}
+        <div class="comment">
+            {{ comment | safe }}
+        </div>
+    {% else %}
+        <p>Нет комментариев. Будьте первым!</p>
+    {% endfor %}
+</body>
+</html>
