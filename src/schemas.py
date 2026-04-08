@@ -31,3 +31,22 @@ class UserCreate(BaseModel):
         if not v.isalnum():
             raise ValueError('Username must contain only letters and numbers')
         return v
+
+class UserInDB(BaseModel):
+    username: str
+    role: str
+    password: str
+
+class FileMetadata(BaseModel):
+    id: int
+    filename: str
+    owner: str
+    size: int
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+class UserResponse(BaseModel):
+    username: str
+    role: str
