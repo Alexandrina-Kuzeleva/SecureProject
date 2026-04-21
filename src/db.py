@@ -1,4 +1,4 @@
-from src.schemas import UserInDB, FileMetadata
+from src.schemas import UserInDB, FileInDB
 
 users_db = {
     "alice": UserInDB(username="alice", role="user", password="alice123"),
@@ -7,10 +7,30 @@ users_db = {
 }
 
 files_db = [
-    FileMetadata(id=1, filename="report_alice.pdf", owner="alice", size=1024),
-    FileMetadata(id=2, filename="photo_bob.jpg", owner="bob", size=2048),
-    FileMetadata(id=3, filename="admin_keys.txt", owner="admin", size=512),
-    FileMetadata(id=4, filename="alice_notes.txt", owner="alice", size=256),
+    FileInDB(
+        id=1, 
+        filename="report_alice.pdf", 
+        owner="alice", 
+        size=1024,
+        path="storage/alice_report.pdf",
+        original_name="report_alice.pdf"
+    ),
+    FileInDB(
+        id=2, 
+        filename="photo_bob.jpg", 
+        owner="bob", 
+        size=2048,
+        path="storage/bob_photo.jpg",
+        original_name="photo_bob.jpg"
+    ),
+    FileInDB(
+        id=3, 
+        filename="admin_keys.txt", 
+        owner="admin", 
+        size=512,
+        path="storage/admin_keys.txt",
+        original_name="admin_keys.txt"
+    ),
 ]
 
-next_file_id = 5
+next_file_id = 4

@@ -50,3 +50,7 @@ class LoginRequest(BaseModel):
 class UserResponse(BaseModel):
     username: str
     role: str
+
+class FileInDB(FileMetadata):
+    path: str  
+    original_name: str 
