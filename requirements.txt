@@ -5,8 +5,10 @@ bleach==6.3.0
 boolean.py==5.0
 CacheControl==0.14.4
 certifi==2026.2.25
+cffi==2.0.0
 charset-normalizer==3.4.6
 click==8.3.1
+cryptography==46.0.7
 cyclonedx-python-lib==11.6.0
 defusedxml==0.7.1
 dnspython==2.8.0
@@ -30,6 +32,7 @@ pip-requirements-parser==32.0.1
 pip_audit==2.10.0
 platformdirs==4.9.4
 py-serializable==2.1.0
+pycparser==3.0
 pydantic==2.12.5
 pydantic_core==2.41.5
 Pygments==2.19.2

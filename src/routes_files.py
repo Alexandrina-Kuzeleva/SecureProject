@@ -1,6 +1,7 @@
 import os
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File as FastAPIFile
-from fastapi.responses import FileResponse
+
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File as FastAPIFile, Query
+from fastapi.responses import FileResponse, Response
 from src.db import files_db
 from src.auth import get_current_user, get_admin_user
 from src.file_permissions import get_file_secure
@@ -29,23 +30,33 @@ def delete_file(file = Depends(get_file_secure), current_user: dict = Depends(ge
 @router.post("/upload")
 async def upload_file(
     file: UploadFile = FastAPIFile(...),
+    encrypt: bool = Query(False, description="Шифровать файл на сервере"),
     current_user: dict = Depends(get_current_user)
 ):
-    result = await save_upload_file(file, current_user)
+    result = await save_upload_file(file, current_user, encrypt)
     return result
 
 @router.get("/{file_id}/download")
 async def download_file(
-    file = Depends(get_file_secure),  
+    file = Depends(get_file_secure),
     current_user: dict = Depends(get_current_user)
 ):
     if not os.path.exists(file.path):
         raise HTTPException(status_code=404, detail="File not found on disk")
     
-    return FileResponse(
-        path=file.path,
-        filename=file.original_name, 
-        media_type="application/octet-stream",  
+    with open(file.path, "rb") as f:
+        file_content = f.read()
+    
+    if file.is_encrypted:
+        from src.encryption import decrypt_data
+        try:
+            file_content = decrypt_data(file_content)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Decryption failed: {str(e)}")
+    
+    return Response(
+        content=file_content,
+        media_type="application/octet-stream",
         headers={
             "Content-Disposition": f"attachment; filename*=UTF-8''{file.original_name}"
         }
