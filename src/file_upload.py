@@ -1,14 +1,20 @@
 import uuid
 import os
-from fastapi import UploadFile, HTTPException, Depends
+from fastapi import UploadFile, HTTPException, Depends, Query
 from src.db import files_db, next_file_id
 from src.auth import get_current_user
+from src.encryption import encrypt_data
 import filetype
 
-MAX_FILE_SIZE = 2 * 1024 * 1024  # 2 MB
+MAX_FILE_SIZE = 2 * 1024 * 1024 
 ALLOWED_MIME_TYPES = ["image/jpeg", "image/png"]
 
-async def save_upload_file(file: UploadFile, current_user: dict) -> dict:
+async def save_upload_file(
+    file: UploadFile, 
+    current_user: dict,
+    encrypt: bool = False
+) -> dict:
+
     content = await file.read()
     
     if len(content) > MAX_FILE_SIZE:
@@ -28,28 +34,33 @@ async def save_upload_file(file: UploadFile, current_user: dict) -> dict:
     uuid_filename = f"{uuid.uuid4()}.{file_extension}"
     file_path = os.path.join("storage", uuid_filename)
     
+    if encrypt:
+        content_to_save = encrypt_data(content)
+    else:
+        content_to_save = content
+    
     with open(file_path, "wb") as f:
-        f.write(content)
+        f.write(content_to_save)
     
     global next_file_id
-    new_file = {
-        "id": next_file_id,
-        "filename": uuid_filename,
-        "owner": current_user["username"],
-        "size": len(content),
-        "path": file_path,
-        "original_name": file.filename
-    }
-    
     from src.schemas import FileInDB
-    file_obj = FileInDB(**new_file)
-    files_db.append(file_obj)
     
+    file_obj = FileInDB(
+        id=next_file_id,
+        filename=uuid_filename,
+        owner=current_user["username"],
+        size=len(content),
+        path=file_path,
+        original_name=file.filename,
+        is_encrypted=encrypt
+    )
+    files_db.append(file_obj)
     next_file_id += 1
     
     return {
         "id": file_obj.id,
         "message": "File uploaded successfully",
         "original_name": file_obj.original_name,
-        "stored_as": uuid_filename
+        "stored_as": uuid_filename,
+        "encrypted": encrypt
     }

@@ -51,6 +51,11 @@ class UserResponse(BaseModel):
     username: str
     role: str
 
-class FileInDB(FileMetadata):
-    path: str  
-    original_name: str 
+class FileInDB(BaseModel):
+    id: int
+    filename: str
+    owner: str
+    size: int
+    path: str
+    original_name: str
+    is_encrypted: bool = False
