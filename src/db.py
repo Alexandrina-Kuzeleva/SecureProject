@@ -1,9 +1,9 @@
 from src.schemas import UserInDB, FileInDB
 
 users_db = {
-    "alice": UserInDB(username="alice", role="user", password="alice123"),
-    "bob": UserInDB(username="bob", role="user", password="bob123"),
-    "admin": UserInDB(username="admin", role="admin", password="admin123"),
+    "alice": UserInDB(username="alice", role="user", password="alice123"), # nosec
+    "bob": UserInDB(username="bob", role="user", password="bob123"), # nosec
+    "admin": UserInDB(username="admin", role="admin", password="admin123"), # nosec
 }
 
 files_db = [

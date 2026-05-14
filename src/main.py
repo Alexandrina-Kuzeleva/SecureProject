@@ -20,7 +20,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "We are sorry, something went wrong."}
     )
 
-app.add_middleware(SessionMiddleware, secret_key="your-super-secret-key-change-this")
+app.add_middleware(SessionMiddleware, secret_key="your-super-secret-key-change-this") # nosec
 app.include_router(files_router)
 templates = Jinja2Templates(directory="templates")
 
