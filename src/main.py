@@ -20,6 +20,24 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "We are sorry, something went wrong."}
     )
 
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
+    response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+    response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' https://cdn.jsdelivr.net https://unpkg.com; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data:;"
+    )
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    return response
+
 app.add_middleware(SessionMiddleware, secret_key="your-super-secret-key-change-this") # nosec
 app.include_router(files_router)
 templates = Jinja2Templates(directory="templates")
