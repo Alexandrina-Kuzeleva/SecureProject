@@ -1,5 +1,14 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
+from passlib.context import CryptContext
 import re
+
+pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
 
 class UserCreate(BaseModel):
     username: str = Field(..., min_length=4, max_length=20)
@@ -8,34 +17,38 @@ class UserCreate(BaseModel):
     confirm_password: str
     age: int = Field(..., ge=18, le=100)
 
-    @field_validator('password')
+    @field_validator("password")
     def password_complexity(cls, v):
         if len(v) < 8:
-            raise ValueError('Password must be at least 8 characters')
-        if not re.search(r'[A-Z]', v):
-            raise ValueError('Password must contain at least one uppercase letter')
-        if not re.search(r'[0-9]', v):
-            raise ValueError('Password must contain at least one digit')
-        if not re.search(r'[!@#$%^&*]', v):
-            raise ValueError('Password must contain at least one special character (!@#$%^&*)')
+            raise ValueError("Password must be at least 8 characters")
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not re.search(r"[0-9]", v):
+            raise ValueError("Password must contain at least one digit")
+        if not re.search(r"[!@#$%^&*]", v):
+            raise ValueError(
+                "Password must contain at least one special character (!@#$%^&*)"
+            )
         return v
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def passwords_match(self):
         if self.password != self.confirm_password:
-            raise ValueError('Password and confirm_password do not match')
+            raise ValueError("Password and confirm_password do not match")
         return self
 
-    @field_validator('username')
+    @field_validator("username")
     def username_alphanumeric(cls, v):
         if not v.isalnum():
-            raise ValueError('Username must contain only letters and numbers')
+            raise ValueError("Username must contain only letters and numbers")
         return v
+
 
 class UserInDB(BaseModel):
     username: str
     role: str
     password: str
+
 
 class FileMetadata(BaseModel):
     id: int
@@ -43,13 +56,16 @@ class FileMetadata(BaseModel):
     owner: str
     size: int
 
+
 class LoginRequest(BaseModel):
     username: str
     password: str
 
+
 class UserResponse(BaseModel):
     username: str
     role: str
+
 
 class FileInDB(BaseModel):
     id: int

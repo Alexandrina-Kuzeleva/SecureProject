@@ -7,6 +7,7 @@ templates = Jinja2Templates(directory="templates")
 
 comments = []
 
+
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
@@ -24,12 +25,13 @@ async def add_security_headers(request: Request, call_next):
     )
     return response
 
+
 @app.get("/comments")
 def get_comments(request: Request):
-    return templates.TemplateResponse("comments_csp.html", {
-        "request": request,
-        "comments": comments
-    })
+    return templates.TemplateResponse(
+        "comments_csp.html", {"request": request, "comments": comments}
+    )
+
 
 @app.post("/comments")
 def post_comment(comment: str = Form(...)):
