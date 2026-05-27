@@ -7,12 +7,13 @@ templates = Jinja2Templates(directory="templates")
 
 comments = []
 
+
 @app.get("/comments")
 def get_comments(request: Request):
-    return templates.TemplateResponse("comments.html", {
-        "request": request,
-        "comments": comments
-    })
+    return templates.TemplateResponse(
+        "comments.html", {"request": request, "comments": comments}
+    )
+
 
 @app.post("/comments")
 def post_comment(comment: str = Form(...)):
